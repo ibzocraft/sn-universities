@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email    String @unique
+  password String @unique
+
+  firstName String
+  lastName  String
+
+  gender String
+  age    Int
+
+  interests FormationCategory[]
+
+  @@map("users")
+}
+
+model Provider {
+
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  type String
+
+  name        String
+  acronym     String
+  description String
+  ratings Rating[]
+
+  cover  String
+  images String[]
+
+  website String?
+  tel     Int?
+  email   String?
+  address String?
+
+  formations Formation[]
+
+  @@map("providers")
+}
+
+model Formation {
+
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categories FormationCategory[]
+  provider   Provider            @relation(fields: [providerId], references: [id])
+  providerId Int                 @unique
+
+  name           String
+  language       String
+  description    String
+  accreditations Accreditation[]
+  ratings Rating[]
+
+  cover String
+
+  price         Float
+  duration      String
+  requiredLevel String
+
+  @@map("formations")
+}
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  provider   Provider?            @relation(fields: [providerId], references: [id])
+  providerId Int?                 
+  formation   Formation?            @relation(fields: [formationId], references: [id])
+  formationId Int?
+
+  stars Int
+  //add author and message                 
+}
+
+
+enum FormationCategory {
+  Informatique
+  MarketingDigital
+  Telecoms
+}
+
+enum Accreditation {
+  CAMES
+}
+
+// String? for optional Field
+//Add indexes later

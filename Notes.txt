@@ -1,0 +1,4 @@
+Nest Tuturial: https://www.youtube.com/watch?v=GHTA143_b-s
+Stopped at: 33:50
+
+Prisma Documentation: https://www.prisma.io/docs/orm/prisma-schema/data-model/models#defining-an-index 
